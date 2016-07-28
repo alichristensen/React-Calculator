@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JS Calculator</title>
+
+	<link rel="stylesheet" type="text/css" href="calc.css">
+	<script src="https://fb.me/react-15.2.1.min.js"></script>
+	<script src="https://fb.me/react-dom-15.2.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.10.3/babel.min.js"></script>
+</head>
+<body>
+	<div id="box"></div>
+
+	<script type="text/babel">
+
+		var Display = React.createClass({
+			render: function() {
+				return (
+					<p>{this.props.children}</p>
+				);
+			}
+		})
+
+		var Button = React.createClass({
+			buttonNumber: function() {
+				this.props.update(this.props.index);
+			},
+			render: function() {
+				return (
+					<button onClick={this.buttonNumber}>{this.props.children}</button>
+				)
+			}
+		})
+
+		var OpButt = React.createClass({
+			operator: function() {
+				this.props.updateOp(this.props.index);
+			},
+			render: function() {
+				return (
+					<button onClick={this.operator}>{this.props.children}
+					</button>
+				);
+			}
+		})
+
+		var Equals = React.createClass({
+			sum: function() {
+				this.props.equalsUpdate();
+			},
+			render: function() {
+				return (
+					<button onClick={this.sum}>=</button>
+				);
+			}
+		})
+
+		var Board = React.createClass({
+			getInitialState: function() {
+				return ({
+					val: 0, 
+					numbers : ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+					display: [], 
+					operators: ["+", "-", "*", "/"]
+				});
+			},
+			eachNumbButton: function(text, i) {
+				return (<Button key={i} index={i} update={this.numbUpdate}>{text}</Button>);
+			},
+			eachOperator: function(text, i) {
+				return(<OpButt key={i} index={i} updateOp={this.opUpdate}>
+					{text}
+				</OpButt>);
+			},
+			numbUpdate: function(i) {
+				var arr = this.state.display;
+				arr.push(i);
+				this.setState({display: arr});
+				var str = arr.join("");
+				console.log(str);
+				this.setState({val: str});
+			},
+			opUpdate: function(i) {
+				var arr = this.state.display;
+				arr.push(this.state.operators[i]);
+				this.setState({display: arr});
+				var str = arr.join("");
+				console.log(str);
+				this.setState({val: str});
+			},
+			equals: function() {
+				var result;
+				var arr = this.state.display;
+				var opLocation;
+				var numb1 = [];
+				var numb2 = [];
+				for (var i=0; i<arr.length; i++){
+					if(arr[i] !== "+" && arr[i] !== "-" && arr[i]!== "*" && arr[i]!=="/") {
+						numb1.push(arr[i]);
+					} else {
+						opLocation = i;
+						console.log("operator is at " + opLocation);
+					}
+				}
+				var numberToRemove = Number(numb1.length-opLocation);
+				numb2 = numb1.splice(opLocation, numberToRemove);
+				var first = Number(numb1.join(''));
+				var second = Number(numb2.join(''));
+
+				if (arr[opLocation] == "+") {
+					result = first + second;
+				} else if (arr[opLocation] == "-") {
+					result = first - second;
+				} else if (arr[opLocation] == "*") {
+					result = first*second;
+				} else if (arr[opLocation] == "/") {
+					result = first/second;
+				} else {
+					result = 0;
+				}
+
+				this.setState({display: result});
+				this.setState({val: result});
+			},
+			reset: function() {
+				var number = 0;
+				this.setState({val: number});
+				this.setState({display: []});
+			},
+			render: function() {
+				return(
+					<div>
+						<div>
+							{this.state.numbers.map(this.eachNumbButton)}
+						</div>
+						<Display>{this.state.val}</Display>
+						<button onClick={this.reset}>reset</button>
+						<div>
+							{this.state.operators.map(this.eachOperator)}
+						</div>
+						<Equals equalsUpdate={this.equals}></Equals>
+					</div>
+				);
+			}
+		})
+
+		ReactDOM.render(
+			<Board />
+		, document.getElementById("box"));
+	</script>
+</body>
+</html>
