@@ -1,13 +1,37 @@
+body {
+  background: #eceff1;
+}
+
 #box {
-	background: #00796b;
+	background: #4dd0e1;
 	height: 200px;
-	width: 200px;
+	width: 300px;
 	margin: 0 auto;
 	color: white;
 }
 
 button {
-	color: #00796b;
-	background: white;
+	color: #4dd0e1;
+	background: #006064;
+	font-size: 1.3em;
 }
 
+.wideButton {
+  width: 100%;
+  height: 40px;
+}
+
+.opButton {
+  width: 25%;
+  height: 40px;
+}
+
+.numbButton {
+  width: 10%;
+  height: 40px;
+}
+
+.display {
+  color: #006064;
+  width: 10%;
+}
