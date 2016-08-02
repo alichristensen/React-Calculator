@@ -104,8 +104,13 @@
 			opUpdate: function(i) {
 				var arr = this.state.display;
 				var prev = arr[arr.length-1]; 
-				if (prev!="+" && prev!="-" && prev!="/" && prev!="*"){
+				if (arr.length == 0) {
+					arr.push(0); 
 					arr.push(this.state.operators[i]);
+				} else {
+					if (prev!="+" && prev!="-" && prev!="/" && prev!="*"){
+						arr.push(this.state.operators[i]);
+					}
 				}
 				this.setState({display: arr});
 				var str = arr.join("");
