@@ -103,7 +103,10 @@
 			},
 			opUpdate: function(i) {
 				var arr = this.state.display;
-				arr.push(this.state.operators[i]);
+				var prev = arr[arr.length-1]; 
+				if (prev!="+" && prev!="-" && prev!="/" && prev!="*"){
+					arr.push(this.state.operators[i]);
+				}
 				this.setState({display: arr});
 				var str = arr.join("");
 				this.setState({val: str});
@@ -119,7 +122,10 @@
       		},
       		decimal: function() {
         		var arr = this.state.display;
-        		arr.push(".");
+        		var prev = arr[arr.length-1]; 
+        		if (prev!=".") {
+        			arr.push(".");
+        		}
         		var result = arr.join('');
         		this.setState({val: result});
         		this.setState({display: arr});
