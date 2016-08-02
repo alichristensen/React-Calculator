@@ -16,7 +16,7 @@
 		var Display = React.createClass({
 			render: function() {
 				return (
-					<p>{this.props.children}</p>
+					<p className="display">{this.props.children}</p>
 				);
 			}
 		})
@@ -27,7 +27,7 @@
 			},
 			render: function() {
 				return (
-					<button onClick={this.buttonNumber}>{this.props.children}</button>
+					<button className="numbButton" onClick={this.buttonNumber}>{this.props.children}</button>
 				)
 			}
 		})
@@ -38,7 +38,7 @@
 			},
 			render: function() {
 				return (
-					<button onClick={this.operator}>{this.props.children}
+					<button className="opButton" onClick={this.operator}>{this.props.children}
 					</button>
 				);
 			}
@@ -50,10 +50,32 @@
 			},
 			render: function() {
 				return (
-					<button onClick={this.sum}>=</button>
+					<button className="wideButton" onClick={this.sum}>=</button>
 				);
 			}
 		})
+    
+    var Percent = React.createClass({
+      perc: function(){
+        this.props.percentUpdate();
+      },
+      render: function() {
+        return (
+          <button className="per" onClick={this.perc}>%</button>
+        );
+      }
+    })
+    
+    var Decimal = React.createClass({
+      dec: function(){
+        this.props.decimalUpdate();
+      },
+      render: function() {
+        return (
+          <button className="dec" onClick={this.dec}>.</button>
+        );
+      }
+    })
 
 		var Board = React.createClass({
 			getInitialState: function() {
@@ -61,7 +83,7 @@
 					val: 0, 
 					numbers : ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
 					display: [], 
-					operators: ["+", "-", "*", "/"]
+					operators: ["+", "-", "*", "/",]
 				});
 			},
 			eachNumbButton: function(text, i) {
@@ -72,12 +94,11 @@
 					{text}
 				</OpButt>);
 			},
-			numbUpdate: function(i) {
+			numbUpdate: function(i) { 
 				var arr = this.state.display;
 				arr.push(i);
 				this.setState({display: arr});
 				var str = arr.join("");
-				console.log(str);
 				this.setState({val: str});
 			},
 			opUpdate: function(i) {
@@ -85,9 +106,24 @@
 				arr.push(this.state.operators[i]);
 				this.setState({display: arr});
 				var str = arr.join("");
-				console.log(str);
 				this.setState({val: str});
 			},
+      		percent: function() {
+        		var arr = this.state.display;
+        		var str = arr.join(''); 
+        		var result = (Number(str))/100;
+        		var arr2 = [];
+        		arr2.push(result);
+        		this.setState({val: result});
+        		this.setState({display: arr2});
+      		},
+      		decimal: function() {
+        		var arr = this.state.display;
+        		arr.push(".");
+        		var result = arr.join('');
+        		this.setState({val: result});
+        		this.setState({display: arr});
+      		},
 			equals: function() {
 				var result;
 				var arr = this.state.display;
@@ -99,7 +135,6 @@
 						numb1.push(arr[i]);
 					} else {
 						opLocation = i;
-						console.log("operator is at " + opLocation);
 					}
 				}
 				var numberToRemove = Number(numb1.length-opLocation);
@@ -119,7 +154,9 @@
 					result = 0;
 				}
 
-				this.setState({display: result});
+				var arr2 = [];
+				arr2.push(result);
+				this.setState({display: arr2});
 				this.setState({val: result});
 			},
 			reset: function() {
@@ -130,15 +167,15 @@
 			render: function() {
 				return(
 					<div>
-						<div>
-							{this.state.numbers.map(this.eachNumbButton)}
-						</div>
+						<div>{this.state.numbers.map(this.eachNumbButton)}</div>
 						<Display>{this.state.val}</Display>
-						<button onClick={this.reset}>reset</button>
-						<div>
-							{this.state.operators.map(this.eachOperator)}
-						</div>
-						<Equals equalsUpdate={this.equals}></Equals>
+						<button className="wideButton" onClick={this.reset}>reset</button>
+						<div>{this.state.operators.map(this.eachOperator)}</div>
+            <div>
+                <Percent percentUpdate={this.percent}/>
+                <Decimal decimalUpdate={this.decimal}/>
+            </div>
+						<Equals className="wideButton" equalsUpdate={this.equals}></Equals>
 					</div>
 				);
 			}
